@@ -1,0 +1,6 @@
+name: hxo-Murder
+version: '${version}'
+
+main: de.danilo.hxoMurder.PaperMain
+api-version: '1.21'
+load: POSTWORLD

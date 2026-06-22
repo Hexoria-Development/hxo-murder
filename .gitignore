@@ -1,0 +1,26 @@
+# Gradle
+.gradle/
+build/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kotlin
+*.kt.bak
+
+# Build outputs
+out/
+bin/
+dist/
