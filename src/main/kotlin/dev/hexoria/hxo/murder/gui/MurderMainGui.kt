@@ -1,4 +1,4 @@
-package de.danilo.hxoMurder.gui
+package dev.hexoria.hxo.murder.gui
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor

@@ -1,7 +1,7 @@
-package de.danilo.hxoMurder
+package dev.hexoria.hxo.murder
 
-import de.danilo.hxoMurder.gui.BowSkinGui
-import de.danilo.hxoMurder.gui.KnifeSkinGui
+import dev.hexoria.hxo.murder.gui.BowSkinGui
+import dev.hexoria.hxo.murder.gui.KnifeSkinGui
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.plugin.java.JavaPlugin

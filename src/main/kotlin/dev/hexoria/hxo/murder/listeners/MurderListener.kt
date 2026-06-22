@@ -1,11 +1,11 @@
-package de.danilo.hxoMurder.listeners
+package dev.hexoria.hxo.murder.listeners
 
-import de.danilo.hxoMurder.ConfigManager
-import de.danilo.hxoMurder.MurderGame
-import de.danilo.hxoMurder.SpawnPoint
-import de.danilo.hxoMurder.commands.MurderCommand
-import de.danilo.hxoMurder.gui.BowSkinGui
-import de.danilo.hxoMurder.gui.KnifeSkinGui
+import dev.hexoria.hxo.murder.ConfigManager
+import dev.hexoria.hxo.murder.MurderGame
+import dev.hexoria.hxo.murder.SpawnPoint
+import dev.hexoria.hxo.murder.commands.MurderCommand
+import dev.hexoria.hxo.murder.gui.BowSkinGui
+import dev.hexoria.hxo.murder.gui.KnifeSkinGui
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration

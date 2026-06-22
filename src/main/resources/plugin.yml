@@ -1,6 +1,7 @@
 name: hxo-Murder
 version: '${version}'
+authors: ${authors}
 
-main: de.danilo.hxoMurder.PaperMain
+main: dev.hexoria.hxo.murder.PaperMain
 api-version: '1.21'
 load: POSTWORLD

@@ -1,11 +1,11 @@
-package de.danilo.hxoMurder
+package dev.hexoria.hxo.murder
 
-import de.danilo.hxoMurder.commands.MurderCommand
-import de.danilo.hxoMurder.gui.BowSkinGui
-import de.danilo.hxoMurder.gui.KnifeSkinGui
-import de.danilo.hxoMurder.gui.MurderMainGui
-import de.danilo.hxoMurder.gui.SettingsGui
-import de.danilo.hxoMurder.listeners.MurderListener
+import dev.hexoria.hxo.murder.commands.MurderCommand
+import dev.hexoria.hxo.murder.gui.BowSkinGui
+import dev.hexoria.hxo.murder.gui.KnifeSkinGui
+import dev.hexoria.hxo.murder.gui.MurderMainGui
+import dev.hexoria.hxo.murder.gui.SettingsGui
+import dev.hexoria.hxo.murder.listeners.MurderListener
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
 import org.bukkit.plugin.java.JavaPlugin
 

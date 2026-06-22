@@ -24,3 +24,6 @@ Thumbs.db
 out/
 bin/
 dist/
+
+# Claud
+.claud/

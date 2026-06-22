@@ -1,4 +1,4 @@
-package de.danilo.hxoMurder
+package dev.hexoria.hxo.murder
 
 import org.bukkit.Location
 import org.bukkit.Material

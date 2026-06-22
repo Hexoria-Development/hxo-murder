@@ -4,6 +4,8 @@ plugins {
     id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
+val authors = listOf("Danilo", "HiorCraft")
+
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
@@ -32,7 +34,7 @@ tasks {
     }
 
     processResources {
-        val props = mapOf("version" to version)
+        val props = mapOf("version" to version, "authors" to authors.joinToString(", ", "[", "]"))
         filesMatching("plugin.yml") {
             expand(props)
         }

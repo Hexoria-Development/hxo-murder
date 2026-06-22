@@ -1,7 +1,7 @@
-package de.danilo.hxoMurder.gui
+package dev.hexoria.hxo.murder.gui
 
-import de.danilo.hxoMurder.ConfigManager
-import de.danilo.hxoMurder.MurderGame
+import dev.hexoria.hxo.murder.ConfigManager
+import dev.hexoria.hxo.murder.MurderGame
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration

@@ -1,15 +1,15 @@
-package de.danilo.hxoMurder.commands
+package dev.hexoria.hxo.murder.commands
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
-import de.danilo.hxoMurder.ConfigManager
-import de.danilo.hxoMurder.MurderGame
-import de.danilo.hxoMurder.SpawnPoint
-import de.danilo.hxoMurder.gui.BowSkinGui
-import de.danilo.hxoMurder.gui.KnifeSkinGui
-import de.danilo.hxoMurder.gui.MurderMainGui
-import de.danilo.hxoMurder.listeners.MurderListener
+import dev.hexoria.hxo.murder.ConfigManager
+import dev.hexoria.hxo.murder.MurderGame
+import dev.hexoria.hxo.murder.SpawnPoint
+import dev.hexoria.hxo.murder.gui.BowSkinGui
+import dev.hexoria.hxo.murder.gui.KnifeSkinGui
+import dev.hexoria.hxo.murder.gui.MurderMainGui
+import dev.hexoria.hxo.murder.listeners.MurderListener
 import io.papermc.paper.command.brigadier.Commands
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
