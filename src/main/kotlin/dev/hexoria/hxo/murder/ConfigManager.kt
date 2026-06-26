@@ -1,5 +1,6 @@
 package dev.hexoria.hxo.murder
 
+import dev.hexoria.hxo.murder.gui.ArrowSkinGui
 import dev.hexoria.hxo.murder.gui.BowSkinGui
 import dev.hexoria.hxo.murder.gui.KnifeSkinGui
 import org.bukkit.Location
@@ -34,6 +35,21 @@ object ConfigManager {
             }
         }
 
+        // Goldpunkte
+        cfg.getConfigurationSection("goldpoints")?.let { sec ->
+            for (key in sec.getKeys(false)) {
+                val num = key.toIntOrNull() ?: continue
+                val s   = sec.getConfigurationSection(key) ?: continue
+                val world = plugin.server.getWorld(s.getString("world") ?: continue) ?: continue
+                val loc = Location(
+                    world,
+                    s.getDouble("x"), s.getDouble("y"), s.getDouble("z"),
+                    s.getDouble("yaw").toFloat(), s.getDouble("pitch").toFloat()
+                )
+                MurderGame.goldPoints[num] = GoldPoint(loc, s.getString("name") ?: "Gold #$num")
+            }
+        }
+
         // Lobby
         cfg.getConfigurationSection("lobby")?.let { sec ->
             val world = plugin.server.getWorld(sec.getString("world") ?: return@let) ?: return@let
@@ -64,6 +80,35 @@ object ConfigManager {
                 if (index in BowSkinGui.SKINS.indices) MurderGame.playerBowSkinIndex[uuid] = index
             }
         }
+
+        // Pfeil-Skins
+        cfg.getConfigurationSection("skins.arrow")?.let { sec ->
+            for (uuidStr in sec.getKeys(false)) {
+                val uuid  = runCatching { UUID.fromString(uuidStr) }.getOrNull() ?: continue
+                val index = sec.getInt(uuidStr, 0)
+                if (index in ArrowSkinGui.SKINS.indices) MurderGame.playerArrowSkinIndex[uuid] = index
+            }
+        }
+
+        // Rollenverlauf
+        cfg.getConfigurationSection("stats.murder")?.let { sec ->
+            for (uuidStr in sec.getKeys(false)) {
+                val uuid = runCatching { UUID.fromString(uuidStr) }.getOrNull() ?: continue
+                MurderGame.playerMurderCount[uuid] = sec.getInt(uuidStr, 0)
+            }
+        }
+        cfg.getConfigurationSection("stats.detective")?.let { sec ->
+            for (uuidStr in sec.getKeys(false)) {
+                val uuid = runCatching { UUID.fromString(uuidStr) }.getOrNull() ?: continue
+                MurderGame.playerDetectiveCount[uuid] = sec.getInt(uuidStr, 0)
+            }
+        }
+        cfg.getConfigurationSection("stats.games")?.let { sec ->
+            for (uuidStr in sec.getKeys(false)) {
+                val uuid = runCatching { UUID.fromString(uuidStr) }.getOrNull() ?: continue
+                MurderGame.playerTotalGames[uuid] = sec.getInt(uuidStr, 0)
+            }
+        }
     }
 
     // ── Speichern ─────────────────────────────────────────────────────────────
@@ -81,6 +126,19 @@ object ConfigManager {
             cfg.set("$p.yaw",  spawn.location.yaw.toDouble())
             cfg.set("$p.pitch",spawn.location.pitch.toDouble())
             cfg.set("$p.name", spawn.name)
+        }
+
+        // Goldpunkte
+        cfg.set("goldpoints", null)
+        for ((num, gold) in MurderGame.goldPoints) {
+            val p = "goldpoints.$num"
+            cfg.set("$p.world", gold.location.world?.name)
+            cfg.set("$p.x",    gold.location.x)
+            cfg.set("$p.y",    gold.location.y)
+            cfg.set("$p.z",    gold.location.z)
+            cfg.set("$p.yaw",  gold.location.yaw.toDouble())
+            cfg.set("$p.pitch",gold.location.pitch.toDouble())
+            cfg.set("$p.name", gold.name)
         }
 
         // Lobby
@@ -108,6 +166,20 @@ object ConfigManager {
         for ((uuid, index) in MurderGame.playerBowSkinIndex) {
             cfg.set("skins.bow.$uuid", index)
         }
+
+        // Pfeil-Skins
+        cfg.set("skins.arrow", null)
+        for ((uuid, index) in MurderGame.playerArrowSkinIndex) {
+            cfg.set("skins.arrow.$uuid", index)
+        }
+
+        // Rollenverlauf
+        cfg.set("stats.murder", null)
+        for ((uuid, count) in MurderGame.playerMurderCount) cfg.set("stats.murder.$uuid", count)
+        cfg.set("stats.detective", null)
+        for ((uuid, count) in MurderGame.playerDetectiveCount) cfg.set("stats.detective.$uuid", count)
+        cfg.set("stats.games", null)
+        for ((uuid, count) in MurderGame.playerTotalGames) cfg.set("stats.games.$uuid", count)
 
         plugin.saveConfig()
     }

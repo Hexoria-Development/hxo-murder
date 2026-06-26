@@ -1,6 +1,7 @@
 package dev.hexoria.hxo.murder
 
 import dev.hexoria.hxo.murder.commands.MurderCommand
+import dev.hexoria.hxo.murder.gui.ArrowSkinGui
 import dev.hexoria.hxo.murder.gui.BowSkinGui
 import dev.hexoria.hxo.murder.gui.KnifeSkinGui
 import dev.hexoria.hxo.murder.gui.MurderMainGui
@@ -19,6 +20,7 @@ class PaperMain : JavaPlugin() {
         server.pluginManager.registerEvents(listener, this)
         server.pluginManager.registerEvents(KnifeSkinGui, this)
         server.pluginManager.registerEvents(BowSkinGui, this)
+        server.pluginManager.registerEvents(ArrowSkinGui, this)
         server.pluginManager.registerEvents(SettingsGui, this)
         server.pluginManager.registerEvents(MurderMainGui, this)
 
@@ -40,6 +42,18 @@ class PaperMain : JavaPlugin() {
                 }
             }
             MurderGame.showingBeacons = false
+        }
+        if (MurderGame.showingGoldBeacons) {
+            for (gold in MurderGame.goldPoints.values) {
+                for ((loc, _) in MurderGame.fakeGoldBeaconBlocks(gold.location)) {
+                    val world = loc.world ?: continue
+                    val realData = world.getBlockAt(loc).blockData
+                    for (player in server.onlinePlayers) {
+                        player.sendBlockChange(loc, realData)
+                    }
+                }
+            }
+            MurderGame.showingGoldBeacons = false
         }
         MurderGame.reset()
         ConfigManager.saveAll()

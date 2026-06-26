@@ -60,7 +60,7 @@ object SettingsGui : Listener {
             Component.text("Linksklick: +1 Spieler", NamedTextColor.AQUA).decoration(TextDecoration.ITALIC, false),
             Component.text("Rechtsklick: -1 Spieler", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false),
             Component.empty(),
-            Component.text("Bereich: 2 - 10", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
+            Component.text("Bereich: 4 - 10", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
         ))
         item.itemMeta = meta
         return item
@@ -114,7 +114,7 @@ object SettingsGui : Listener {
                     ClickType.RIGHT -> -1
                     else            -> return
                 }
-                MurderGame.configuredMaxPlayers = (MurderGame.configuredMaxPlayers + delta).coerceIn(2, 10)
+                MurderGame.configuredMaxPlayers = (MurderGame.configuredMaxPlayers + delta).coerceIn(4, 10)
                 ConfigManager.saveAll()
                 val updated = buildCountItem()
                 openInventories.forEach { it.setItem(SLOT_COUNT, updated) }

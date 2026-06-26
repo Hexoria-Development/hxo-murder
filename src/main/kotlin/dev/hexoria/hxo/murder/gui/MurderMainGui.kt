@@ -17,9 +17,10 @@ object MurderMainGui : Listener {
 
     private val openInventories = mutableSetOf<Inventory>()
 
-    private const val SLOT_KNIFE    = 11
-    private const val SLOT_SETTINGS = 13
-    private const val SLOT_BOW      = 15
+    private const val SLOT_KNIFE    = 10
+    private const val SLOT_ARROW    = 12
+    private const val SLOT_SETTINGS = 14
+    private const val SLOT_BOW      = 16
 
     fun open(player: Player) {
         val inv = Bukkit.createInventory(
@@ -33,6 +34,12 @@ object MurderMainGui : Listener {
             "Messer-Skin waehlen",
             NamedTextColor.RED,
             "Aendere den Look deiner Waffe"
+        ))
+        inv.setItem(SLOT_ARROW, makeButton(
+            Material.ARROW,
+            "Pfeil-Skin waehlen",
+            NamedTextColor.YELLOW,
+            "Aendere den Look deines Pfeils"
         ))
         inv.setItem(SLOT_SETTINGS, makeButton(
             Material.COMPARATOR,
@@ -87,6 +94,7 @@ object MurderMainGui : Listener {
         val player = event.whoClicked as? Player ?: return
         when (event.rawSlot) {
             SLOT_KNIFE    -> { player.closeInventory(); KnifeSkinGui.open(player) }
+            SLOT_ARROW    -> { player.closeInventory(); ArrowSkinGui.open(player) }
             SLOT_SETTINGS -> { player.closeInventory(); SettingsGui.open(player) }
             SLOT_BOW      -> { player.closeInventory(); BowSkinGui.open(player) }
         }

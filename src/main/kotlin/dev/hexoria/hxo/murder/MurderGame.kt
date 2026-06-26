@@ -6,10 +6,13 @@ import org.bukkit.scheduler.BukkitTask
 import java.util.UUID
 
 data class SpawnPoint(val location: Location, val name: String)
+data class GoldPoint(val location: Location, val name: String)
 
 object MurderGame {
     val spawnPoints = mutableMapOf<Int, SpawnPoint>()
     var showingBeacons = false
+    val goldPoints = mutableMapOf<Int, GoldPoint>()
+    var showingGoldBeacons = false
     var lobbySpawn: Location? = null
 
     var running = false
@@ -21,12 +24,14 @@ object MurderGame {
     // Persistent skins (survive game resets)
     val playerKnifeSkins = mutableMapOf<UUID, Material>()
     val playerBowSkinIndex = mutableMapOf<UUID, Int>()
+    val playerArrowSkinIndex = mutableMapOf<UUID, Int>()
 
     // Settings (persist between games)
     var configuredMaxPlayers: Int = 10
 
     // Round state
     var arrowCooldownTask: BukkitTask? = null
+    var knifeCountdownTask: BukkitTask? = null
     var detectiveArrowReady = true
     val frozenPlayers = mutableSetOf<UUID>()
 
@@ -36,6 +41,23 @@ object MurderGame {
     // Bow drop location + players who must move away before pickup
     val bowDropLocations = mutableMapOf<UUID, org.bukkit.Location>()
     val playersNearBowOnDrop = mutableMapOf<UUID, MutableSet<UUID>>()
+
+    // Persistent role history (never cleared on reset)
+    val playerMurderCount    = mutableMapOf<UUID, Int>()
+    val playerDetectiveCount = mutableMapOf<UUID, Int>()
+    val playerTotalGames     = mutableMapOf<UUID, Int>()
+
+    // Pre-game countdown
+    var preGameTask: BukkitTask? = null
+
+    // Gold round state
+    val playerGoldCount = mutableMapOf<UUID, Int>()
+    val playerHasGoldBow = mutableSetOf<UUID>()
+    val goldBowPlayers = mutableSetOf<UUID>()
+    val activeGoldDrops = mutableMapOf<UUID, Int>() // item entity UUID → gold point key
+    val goldPointPool = ArrayDeque<Int>()
+    val activeGoldPointIndices = mutableSetOf<Int>()
+    val goldBowArrowCooldownTasks = mutableMapOf<UUID, BukkitTask>()
 
     fun fakeBeaconBlocks(spawnLoc: Location): List<Pair<Location, Material>> {
         val bx = spawnLoc.blockX
@@ -51,6 +73,20 @@ object MurderGame {
         }
     }
 
+    fun fakeGoldBeaconBlocks(loc: Location): List<Pair<Location, Material>> {
+        val bx = loc.blockX
+        val by = loc.blockY
+        val bz = loc.blockZ
+        val world = loc.world
+        return buildList {
+            add(Location(world, bx.toDouble(), (by - 1).toDouble(), bz.toDouble()) to Material.BEACON)
+            for (dx in -1..1) for (dz in -1..1) {
+                add(Location(world, (bx + dx).toDouble(), (by - 2).toDouble(), (bz + dz).toDouble()) to Material.IRON_BLOCK)
+            }
+            add(Location(world, bx.toDouble(), (by + 1).toDouble(), bz.toDouble()) to Material.CYAN_STAINED_GLASS)
+        }
+    }
+
     fun reset() {
         running = false
         murderId = null
@@ -59,10 +95,22 @@ object MurderGame {
         allGamePlayers.clear()
         arrowCooldownTask?.cancel()
         arrowCooldownTask = null
+        knifeCountdownTask?.cancel()
+        knifeCountdownTask = null
         detectiveArrowReady = true
         frozenPlayers.clear()
         droppedDetectiveBows.clear()
         bowDropLocations.clear()
         playersNearBowOnDrop.clear()
+        preGameTask?.cancel()
+        preGameTask = null
+        playerGoldCount.clear()
+        playerHasGoldBow.clear()
+        goldBowPlayers.clear()
+        activeGoldDrops.clear()
+        goldPointPool.clear()
+        activeGoldPointIndices.clear()
+        goldBowArrowCooldownTasks.values.forEach { it.cancel() }
+        goldBowArrowCooldownTasks.clear()
     }
 }
