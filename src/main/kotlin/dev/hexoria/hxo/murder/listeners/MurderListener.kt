@@ -297,14 +297,6 @@ class MurderListener(private val plugin: JavaPlugin) : Listener {
         detective.inventory.setItem(1, BowSkinGui.makeBowItem(bowSkin))
         detective.inventory.setItem(2, ArrowSkinGui.makeArrowItem(arrowSkin))
         detective.sendMessage("§a§l[Murder] §r§fDu bist der §a§lDetektiv§r§f! Jeder Schuss = One-Shot. Cooldown: 10s")
-
-        // ── Mörder-Bogen (ab Start im Inv, nicht durch Gold) ─────────────────
-        val murderBowSkin = BowSkinGui.SKINS.getOrElse(MurderGame.playerBowSkinIndex[murder.uniqueId] ?: 0) { BowSkinGui.SKINS[0] }
-        murder.inventory.setItem(2, BowSkinGui.makeBowItem(murderBowSkin))
-        if (murderBowSkin.weaponMaterial != Material.TRIDENT) {
-            val murderArrowSkin = ArrowSkinGui.SKINS.getOrElse(MurderGame.playerArrowSkinIndex[murder.uniqueId] ?: 0) { ArrowSkinGui.SKINS[0] }
-            murder.inventory.setItem(3, ArrowSkinGui.makeArrowItem(murderArrowSkin))
-        }
         innocents.forEach { it.sendMessage("§7§l[Murder] §r§fDu bist §7§lunschuldig§r§f. Überlebe!") }
         zuschauer.forEach { it.gameMode = GameMode.SPECTATOR; it.sendMessage("§c[Murder] §fDie Runde ist voll, bitte warte!") }
 
@@ -702,7 +694,7 @@ class MurderListener(private val plugin: JavaPlugin) : Listener {
         if (!MurderGame.running) return
         val player = event.entity as? Player ?: return
         if (player.uniqueId in MurderGame.frozenPlayers) { event.isCancelled = true; return }
-        if (player.uniqueId !in MurderGame.alivePlayers) { event.isCancelled = true; return }
+        if (player.uniqueId !in MurderGame.alivePlayers || player.uniqueId == MurderGame.murderId) { event.isCancelled = true; return }
 
         val isGoldBow = event.bow?.itemMeta?.persistentDataContainer?.has(goldBowKey) == true
         when {
@@ -717,7 +709,7 @@ class MurderListener(private val plugin: JavaPlugin) : Listener {
         val trident = event.entity as? Trident ?: return
         val player  = trident.shooter as? Player ?: return
         if (player.uniqueId in MurderGame.frozenPlayers) { event.isCancelled = true; return }
-        if (player.uniqueId !in MurderGame.alivePlayers) { event.isCancelled = true; return }
+        if (player.uniqueId !in MurderGame.alivePlayers || player.uniqueId == MurderGame.murderId) { event.isCancelled = true; return }
         if (player.uniqueId == MurderGame.detectiveId && !MurderGame.detectiveArrowReady) event.isCancelled = true
     }
 
@@ -742,7 +734,6 @@ class MurderListener(private val plugin: JavaPlugin) : Listener {
                 victim.uniqueId == MurderGame.murderId -> { event.isCancelled = false; event.damage = 1000.0 }
                 shooter.uniqueId == MurderGame.detectiveId -> { event.isCancelled = false; event.damage = 1000.0 }
                 shooter.uniqueId in MurderGame.goldBowPlayers -> { event.isCancelled = false; event.damage = 1000.0 }
-                shooter.uniqueId == MurderGame.murderId -> { event.isCancelled = false; event.damage = 1000.0 }
                 else -> event.isCancelled = true
             }
         }
